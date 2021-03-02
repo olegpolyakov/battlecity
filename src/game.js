@@ -3,6 +3,7 @@ export default class Game {
         this.world = world;
         this.view = view;
         this.levels = levels;
+        this.level = 0;
         this.activeKeys = new Set();
 
         this.loop = this.loop.bind(this);
@@ -10,6 +11,7 @@ export default class Game {
 
     async init() {
         this.view.init();
+        this.world.setLevel(this.levels[this.level]);
 
         document.addEventListener('keydown', event => {
             event.preventDefault();
@@ -49,7 +51,6 @@ export default class Game {
     }
 
     loop() {
-        // get input
         this.world.update(this.activeKeys);
         this.view.update(this.world);
 
