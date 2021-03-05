@@ -14,8 +14,6 @@ export default class Game {
         this.world.setLevel(this.levels[this.level]);
 
         document.addEventListener('keydown', event => {
-            event.preventDefault();
-
             switch (event.code) {
                 case 'ArrowUp':
                 case 'ArrowRight':
@@ -23,6 +21,7 @@ export default class Game {
                 case 'ArrowLeft':
                 case 'Space':
                 case 'Enter':
+                    event.preventDefault();
                     this.activeKeys.add(event.code);
             }
 
@@ -30,8 +29,6 @@ export default class Game {
         });
 
         document.addEventListener('keyup', event => {
-            event.preventDefault();
-
             switch (event.code) {
                 case 'ArrowUp':
                 case 'ArrowRight':
@@ -39,6 +36,7 @@ export default class Game {
                 case 'ArrowLeft':
                 case 'Space':
                 case 'Enter':
+                    event.preventDefault();
                     this.activeKeys.delete(event.code);
             }
 

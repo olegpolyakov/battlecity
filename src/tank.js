@@ -1,23 +1,32 @@
 import { Direction } from './constants.js';
 
 export default class Tank {
-    direction = Direction.UP;
-    x = 64 * 3;
-    y = 192 * 3;
-    width = 48;
-    height = 48;
-    speed = 3;
-    animationFrame = 0;
-    frames = [
-        [0 * 48, 0 * 48, 48, 48],
-        [1 * 48, 0 * 48, 48, 48],
-        [6 * 48, 0 * 48, 48, 48],
-        [7 * 48, 0 * 48, 48, 48],
-        [4 * 48, 0 * 48, 48, 48],
-        [5 * 48, 0 * 48, 48, 48],
-        [2 * 48, 0 * 48, 48, 48],
-        [3 * 48, 0 * 48, 48, 48]
-    ];
+    constructor({ x, y, width, height, direction, speed, frames }) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.direction = direction;
+        this.speed = speed;
+        this.frames = frames;
+        this.animationFrame = 0;
+    }
+
+    get top() {
+        return this.y;
+    }
+
+    get right() {
+        return this.x + this.width;
+    }
+
+    get bottom() {
+        return this.y + this.height;
+    }
+
+    get left() {
+        return this.x;
+    }
 
     get sprite() {
         return this.frames[this.direction * 2 + this.animationFrame];
@@ -26,27 +35,31 @@ export default class Tank {
     update(world, activeKeys) {
         if (activeKeys.has('ArrowUp')) {
             this._turn(Direction.UP);
+            this._move('y', -1);
 
-            if (world.canMove(this)) {
-                this._move('y', -1);
+            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
+                this._move('y', 1);
             }
         } else if (activeKeys.has('ArrowRight')) {
             this._turn(Direction.RIGHT);
+            this._move('x', 1);
 
-            if (world.canMove(this)) {
-                this._move('x', 1);
+            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
+                this._move('x', -1);
             }
         } else if (activeKeys.has('ArrowDown')) {
             this._turn(Direction.DOWN);
+            this._move('y', 1);
 
-            if (world.canMove(this)) {
-                this._move('y', 1);
+            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
+                this._move('y', -1);
             }
         } else if (activeKeys.has('ArrowLeft')) {
             this._turn(Direction.LEFT);
+            this._move('x', -1);
 
-            if (world.canMove(this)) {
-                this._move('x', -1);
+            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
+                this._move('x', 1);
             }
         }
     }

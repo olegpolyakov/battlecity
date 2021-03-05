@@ -1,26 +1,55 @@
-import { CELL_SIZE, Direction } from './constants.js';
-import Tank from './Tank.js';
+import * as constants from './constants.js';
+import Tank from './tank.js';
+import Wall from './wall.js';
 
 export default class World {
     level = null;
-    player1Tank = new Tank();
+    player1Tank = new Tank({
+        x: constants.PLAYER1_TANK_START_X,
+        y: constants.PLAYER1_TANK_START_Y,
+        width: constants.TANK_WIDTH,
+        height: constants.TANK_HEIGHT,
+        direction: constants.Direction.UP,
+        speed: constants.TANK_SPEED,
+        frames: constants.PLAYER1_TANK_SPRITES
+    });
     player2Tank = null;
     enemyTanks = [];
 
-    get size() {
-        return this.level[0].length * CELL_SIZE;
+    get width() {
+        return constants.WORLD_SIZE;
+    }
+
+    get height() {
+        return constants.WORLD_SIZE;
+    }
+
+    get top() {
+        return 0;
+    }
+
+    get right() {
+        return this.width;
+    }
+
+    get bottom() {
+        return this.height;
+    }
+
+    get left() {
+        return 0;
     }
 
     setLevel(data) {
         this.level = data.map((blocks, y) => {
             return blocks.map((block, x) => {
-                return {
-                    x: x * CELL_SIZE,
-                    y: y * CELL_SIZE,
-                    width: CELL_SIZE,
-                    height: CELL_SIZE,
+                return block > 0 ? new Wall({
+                    x: x * constants.CELL_SIZE,
+                    y: y * constants.CELL_SIZE,
+                    width: constants.CELL_SIZE,
+                    height: constants.CELL_SIZE,
                     sprite: block
-                };
+                }) : null;
             });
         });
     }
@@ -29,75 +58,44 @@ export default class World {
         this.player1Tank.update(this, activeKeys);
     }
 
-    canMove(object) {
-        const { direction, x, y, width, height } = object;
+    isOutOfBounds(object) {
+        return (
+            object.top < this.top ||
+            object.right > this.right ||
+            object.bottom > this.bottom ||
+            object.left < this.left
+        );
+    }
 
-        if (direction === Direction.UP) {
-            const nextY = y - 1;
-            const objectOnPath = this._getObjectOnY(object, nextY);
+    hasCollision(object) {
+        const collisionObject = this._getCollisionObject(object);
 
-            return !objectOnPath && nextY > 0;
-        } else if (direction === Direction.RIGHT) {
-            const nextX = x + 1;
-            const objectOnPath = this._getObjectOnX(object, nextX);
-
-            return !objectOnPath && (nextX + width) < this.size;
-        } else if (direction === Direction.DOWN) {
-            const nextY = y + 1;
-            const objectOnPath = this._getObjectOnY(object, nextY);
-
-            return !objectOnPath && (nextY + height) < this.size;
-        } else if (direction === Direction.LEFT) {
-            const nextX = x - 1;
-            const objectOnPath = this._getObjectOnX(object, nextX);
-
-            return !objectOnPath && nextX > 0;
+        if (collisionObject) {
+            collisionObject.debug = true;
         }
+
+        return Boolean(collisionObject);
     }
 
-    _getObjectOnX(object, nextX) {
+    _getCollisionObject(object) {
         return this.level
             .reduce((result, blocks) => result.concat(...blocks), [])
-            .find(block =>
-                block.sprite > 0 &&
-                (
-                    isSame(object.y, block.y) ||
-                    isBetween(object.y, block.y, block.y + block.height) ||
-                    isBetween(object.y + object.height, block.y, block.y + block.height)
-                )
-                &&
-                (
-                    isSame(nextX, block.x) ||
-                    isBetween(nextX, block.x, block.x + block.width) ||
-                    isBetween(nextX + object.width, block.x, block.x + block.width)
-                )
-            );
+            .find(block => block && this._objectsHaveCollision(object, block));
     }
 
-    _getObjectOnY(object, nextY) {
-        return this.level
-            .reduce((result, blocks) => result.concat(...blocks), [])
-            .find(block =>
-                block.sprite > 0 &&
-                (
-                    isSame(nextY, block.y) ||
-                    isBetween(nextY, block.y, block.y + block.height) ||
-                    isBetween(nextY + object.height, block.y, block.y + block.height)
-                )
-                &&
-                (
-                    isSame(object.x, block.x) ||
-                    isBetween(object.x, block.x, block.x + block.width) ||
-                    isBetween(object.x + object.width, block.x, block.x + block.width)
-                )
-            );
+    _objectsHaveCollision(a, b) {
+        return (
+            (
+                (a.left >= b.left && a.left < b.right)
+                ||
+                (a.right > b.left && a.right <= b.right)
+            )
+            &&
+            (
+                (a.top >= b.top && a.top < b.bottom)
+                ||
+                (a.bottom > b.top && a.bottom <= b.bottom)
+            )
+        );
     }
-}
-
-function isBetween(p, p1, p2) {
-    return p > p1 && p < p2;
-}
-
-function isSame(p1, p2) {
-    return p1 === p2;
 }
