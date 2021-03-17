@@ -1,20 +1,30 @@
 import * as constants from './constants.js';
+import Base from './base.js';
+import Stage from './stage.js';
 import Tank from './tank.js';
-import Wall from './wall.js';
 
 export default class World {
-    level = null;
-    player1Tank = new Tank({
-        x: constants.PLAYER1_TANK_START_X,
-        y: constants.PLAYER1_TANK_START_Y,
-        width: constants.TANK_WIDTH,
-        height: constants.TANK_HEIGHT,
-        direction: constants.Direction.UP,
-        speed: constants.TANK_SPEED,
-        frames: constants.PLAYER1_TANK_SPRITES
-    });
-    player2Tank = null;
-    enemyTanks = [];
+    constructor() {
+        this.stage = null;
+        this.base = new Base({
+            x: constants.BASE_X,
+            y: constants.BASE_Y,
+            width: constants.UNIT_SIZE,
+            height: constants.UNIT_SIZE,
+            sprites: constants.BASE_SPRITES
+        });
+        this.player1Tank = new Tank({
+            x: constants.PLAYER1_TANK_START_X,
+            y: constants.PLAYER1_TANK_START_Y,
+            width: constants.TANK_WIDTH,
+            height: constants.TANK_HEIGHT,
+            sprites: constants.PLAYER1_TANK_SPRITES,
+            direction: constants.Direction.UP,
+            speed: constants.TANK_SPEED
+        });
+        this.player2Tank = null;
+        this.enemyTanks = [];
+    }
 
     get width() {
         return constants.WORLD_SIZE;
@@ -40,18 +50,12 @@ export default class World {
         return 0;
     }
 
-    setLevel(data) {
-        this.level = data.map((blocks, y) => {
-            return blocks.map((block, x) => {
-                return block > 0 ? new Wall({
-                    x: x * constants.CELL_SIZE,
-                    y: y * constants.CELL_SIZE,
-                    width: constants.CELL_SIZE,
-                    height: constants.CELL_SIZE,
-                    sprite: block
-                }) : null;
-            });
-        });
+    get objects() {
+        return [this.base, this.player1Tank, ...this.stage.objects];
+    }
+
+    setStage(data) {
+        this.stage = new Stage(data);
     }
 
     update(activeKeys) {
@@ -68,34 +72,32 @@ export default class World {
     }
 
     hasCollision(object) {
+        const collision = this.getCollision(object);
+
+        return Boolean(collision);
+    }
+
+    getCollision(object) {
         const collisionObject = this._getCollisionObject(object);
 
         if (collisionObject) {
             collisionObject.debug = true;
-        }
 
-        return Boolean(collisionObject);
+            return { object: collisionObject };
+        }
     }
 
     _getCollisionObject(object) {
-        return this.level
-            .reduce((result, blocks) => result.concat(...blocks), [])
-            .find(block => block && this._objectsHaveCollision(object, block));
+        return this.stage.objects
+            .find(block => block && this._haveCollision(object, block));
     }
 
-    _objectsHaveCollision(a, b) {
+    _haveCollision(a, b) {
         return (
-            (
-                (a.left >= b.left && a.left < b.right)
-                ||
-                (a.right > b.left && a.right <= b.right)
-            )
-            &&
-            (
-                (a.top >= b.top && a.top < b.bottom)
-                ||
-                (a.bottom > b.top && a.bottom <= b.bottom)
-            )
+            a.left < b.right &&
+            a.right > b.left &&
+            a.top < b.bottom &&
+            a.bottom > b.top
         );
     }
 }

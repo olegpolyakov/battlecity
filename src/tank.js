@@ -1,75 +1,81 @@
-import { Direction } from './constants.js';
+import { Direction, Keys, TILE_SIZE, TANK_TURN_THRESHOLD } from './constants.js';
+import { getDirectionForKeys, getAxisForDirection, getValueForDirection } from './utils.js';
+import GameObject from './game-object.js';
 
-export default class Tank {
-    constructor({ x, y, width, height, direction, speed, frames }) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+export default class Tank extends GameObject {
+    constructor({ direction, speed, ...rest }) {
+        super(rest);
+
         this.direction = direction;
         this.speed = speed;
-        this.frames = frames;
-        this.animationFrame = 0;
-    }
-
-    get top() {
-        return this.y;
-    }
-
-    get right() {
-        return this.x + this.width;
-    }
-
-    get bottom() {
-        return this.y + this.height;
-    }
-
-    get left() {
-        return this.x;
     }
 
     get sprite() {
-        return this.frames[this.direction * 2 + this.animationFrame];
+        return this.sprites[this.direction * 2 + this.animationFrame];
     }
 
     update(world, activeKeys) {
-        if (activeKeys.has('ArrowUp')) {
-            this._turn(Direction.UP);
-            this._move('y', -1);
+        if (
+            activeKeys.has(Keys.UP) ||
+            activeKeys.has(Keys.RIGHT) ||
+            activeKeys.has(Keys.DOWN) ||
+            activeKeys.has(Keys.LEFT)
+        ) {
+            const direction = getDirectionForKeys(activeKeys);
 
-            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
-                this._move('y', 1);
+            this._turn(world, direction);
+            this._move(world, direction);
+        }
+    }
+
+    _turn(world, direction) {
+        const prevDirection = this.direction;
+        this.direction = direction;
+
+        if (direction === Direction.UP || direction === Direction.DOWN) {
+            if (prevDirection === Direction.RIGHT) {
+                const value = TILE_SIZE - (this.x % TILE_SIZE);
+
+                if (value <= TANK_TURN_THRESHOLD) {
+                    this.x += value;
+                }
+            } else if (prevDirection === Direction.LEFT) {
+                const value = this.x % TILE_SIZE;
+
+                if (value <= TANK_TURN_THRESHOLD) {
+                    this.x -= value;
+                }
             }
-        } else if (activeKeys.has('ArrowRight')) {
-            this._turn(Direction.RIGHT);
-            this._move('x', 1);
+        } else {
+            if (prevDirection === Direction.UP) {
+                const value = this.y % TILE_SIZE;
 
-            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
-                this._move('x', -1);
-            }
-        } else if (activeKeys.has('ArrowDown')) {
-            this._turn(Direction.DOWN);
-            this._move('y', 1);
+                if (value <= TANK_TURN_THRESHOLD) {
+                    this.y -= value;
+                }
+            } else if (prevDirection === Direction.DOWN) {
+                const value = TILE_SIZE - (this.y % TILE_SIZE);
 
-            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
-                this._move('y', -1);
-            }
-        } else if (activeKeys.has('ArrowLeft')) {
-            this._turn(Direction.LEFT);
-            this._move('x', -1);
-
-            if (world.isOutOfBounds(this) || world.hasCollision(this)) {
-                this._move('x', 1);
+                if (value <= TANK_TURN_THRESHOLD) {
+                    this.y += value;
+                }
             }
         }
     }
 
-    _turn(direction) {
-        this.direction = direction;
-    }
+    _move(world, direction) {
+        const axis = getAxisForDirection(direction);
+        const value = getValueForDirection(direction);
+        const delta = value * this.speed;
 
-    _move(axis, value) {
-        this[axis] += this.speed * value;
         this.animationFrame ^= 1;
+        this[axis] += delta;
+
+        const isOutOfBounds = world.isOutOfBounds(this);
+        const hasCollision = world.hasCollision(this);
+
+        if (isOutOfBounds || hasCollision) {
+            this[axis] += -delta;
+        }
     }
 }

@@ -1,9 +1,9 @@
 export default class Game {
-    constructor({ world, view, levels }) {
+    constructor({ world, view, stages }) {
         this.world = world;
         this.view = view;
-        this.levels = levels;
-        this.level = 0;
+        this.stages = stages;
+        this.stage = 0;
         this.activeKeys = new Set();
 
         this.loop = this.loop.bind(this);
@@ -11,7 +11,7 @@ export default class Game {
 
     async init() {
         this.view.init();
-        this.world.setLevel(this.levels[this.level]);
+        this.world.setStage(this.stages[this.stage]);
 
         document.addEventListener('keydown', event => {
             switch (event.code) {
