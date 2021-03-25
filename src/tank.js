@@ -1,45 +1,36 @@
-import { Direction, Keys, TILE_SIZE, TANK_TURN_THRESHOLD } from './constants.js';
-import { getDirectionForKeys, getAxisForDirection, getValueForDirection } from './utils.js';
+import { TILE_SIZE, TANK_WIDTH, TANK_HEIGHT, TANK_SPEED, TANK_TURN_THRESHOLD } from './constants.js';
+import { getAxisForDirection } from './utils.js';
 import GameObject from './game-object.js';
+import Bullet from './bullet.js';
 
 export default class Tank extends GameObject {
-    constructor({ direction, speed, ...rest }) {
-        super(rest);
+    constructor(args) {
+        super(args);
 
-        this.direction = direction;
-        this.speed = speed;
+        this.width = TANK_WIDTH;
+        this.height = TANK_HEIGHT;
+        this.speed = TANK_SPEED;
+        this.bulletSpeed = 4;
+        this.bullet = null;
     }
 
     get sprite() {
         return this.sprites[this.direction * 2 + this.animationFrame];
     }
 
-    update(world, activeKeys) {
-        if (
-            activeKeys.has(Keys.UP) ||
-            activeKeys.has(Keys.RIGHT) ||
-            activeKeys.has(Keys.DOWN) ||
-            activeKeys.has(Keys.LEFT)
-        ) {
-            const direction = getDirectionForKeys(activeKeys);
-
-            this._turn(world, direction);
-            this._move(world, direction);
-        }
-    }
-
-    _turn(world, direction) {
+    _turn(direction) {
         const prevDirection = this.direction;
+
         this.direction = direction;
 
-        if (direction === Direction.UP || direction === Direction.DOWN) {
-            if (prevDirection === Direction.RIGHT) {
+        if (direction === GameObject.Direction.UP || direction === GameObject.Direction.DOWN) {
+            if (prevDirection === GameObject.Direction.RIGHT) {
                 const value = TILE_SIZE - (this.x % TILE_SIZE);
 
                 if (value <= TANK_TURN_THRESHOLD) {
                     this.x += value;
                 }
-            } else if (prevDirection === Direction.LEFT) {
+            } else if (prevDirection === GameObject.Direction.LEFT) {
                 const value = this.x % TILE_SIZE;
 
                 if (value <= TANK_TURN_THRESHOLD) {
@@ -47,13 +38,13 @@ export default class Tank extends GameObject {
                 }
             }
         } else {
-            if (prevDirection === Direction.UP) {
+            if (prevDirection === GameObject.Direction.UP) {
                 const value = this.y % TILE_SIZE;
 
                 if (value <= TANK_TURN_THRESHOLD) {
                     this.y -= value;
                 }
-            } else if (prevDirection === Direction.DOWN) {
+            } else if (prevDirection === GameObject.Direction.DOWN) {
                 const value = TILE_SIZE - (this.y % TILE_SIZE);
 
                 if (value <= TANK_TURN_THRESHOLD) {
@@ -63,19 +54,41 @@ export default class Tank extends GameObject {
         }
     }
 
-    _move(world, direction) {
-        const axis = getAxisForDirection(direction);
-        const value = getValueForDirection(direction);
-        const delta = value * this.speed;
+    _move(axis, value) {
+        this[axis] += value * this.speed;
+    }
 
-        this.animationFrame ^= 1;
-        this[axis] += delta;
+    _fire() {
+        if (!this.bullet) {
+            const [x, y] = this._getBulletStartingPosition();
 
-        const isOutOfBounds = world.isOutOfBounds(this);
-        const hasCollision = world.hasCollision(this);
+            const bullet = new Bullet({
+                x,
+                y,
+                tank: this,
+                direction: this.direction,
+                speed: this.bulletSpeed
+            });
 
-        if (isOutOfBounds || hasCollision) {
-            this[axis] += -delta;
+            this.bullet = bullet;
+        }
+    }
+
+    _animate(frameDelta) {
+        this.frames += frameDelta;
+
+        if (this.frames > 20) {
+            this.animationFrame ^= 1;
+            this.frames = 0;
+        }
+    }
+
+    _getBulletStartingPosition() {
+        switch (this.direction) {
+            case Tank.Direction.UP: return [this.left + 10, this.top];
+            case Tank.Direction.RIGHT: return [this.right - 8, this.top + 12];
+            case Tank.Direction.DOWN: return [this.left + 10, this.bottom - 8];
+            case Tank.Direction.LEFT: return [this.left, this.top + 12];
         }
     }
 }

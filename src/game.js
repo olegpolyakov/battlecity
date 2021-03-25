@@ -1,56 +1,38 @@
+import Stage from './stage.js';
+
 export default class Game {
-    constructor({ world, view, stages }) {
-        this.world = world;
+    constructor({ input, view, stages }) {
+        this.input = input;
         this.view = view;
         this.stages = stages;
-        this.stage = 0;
-        this.activeKeys = new Set();
+        this.player1 = null;
+        this.player2 = null;
+        this.stage = null;
+        this.stageIndex = 0;
+        this.frames = 0;
+        this.lastFrame = 0;
 
         this.loop = this.loop.bind(this);
     }
 
     async init() {
         this.view.init();
-        this.world.setStage(this.stages[this.stage]);
-
-        document.addEventListener('keydown', event => {
-            switch (event.code) {
-                case 'ArrowUp':
-                case 'ArrowRight':
-                case 'ArrowDown':
-                case 'ArrowLeft':
-                case 'Space':
-                case 'Enter':
-                    event.preventDefault();
-                    this.activeKeys.add(event.code);
-            }
-
-            this.key = event.code;
-        });
-
-        document.addEventListener('keyup', event => {
-            switch (event.code) {
-                case 'ArrowUp':
-                case 'ArrowRight':
-                case 'ArrowDown':
-                case 'ArrowLeft':
-                case 'Space':
-                case 'Enter':
-                    event.preventDefault();
-                    this.activeKeys.delete(event.code);
-            }
-
-            this.key = '';
-        });
     }
 
     start() {
+        this.stage = new Stage(this.stages[this.stageIndex]);
+
         requestAnimationFrame(this.loop);
     }
 
-    loop() {
-        this.world.update(this.activeKeys);
-        this.view.update(this.world);
+    loop(currentFrame) {
+        const frameDelta = currentFrame - this.lastFrame;
+
+        this.stage.update(this.input, frameDelta);
+        this.view.update(this.stage);
+        this.frames = 0;
+
+        this.lastFrame = currentFrame;
 
         requestAnimationFrame(this.loop);
     }
