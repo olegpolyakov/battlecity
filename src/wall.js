@@ -8,10 +8,11 @@ export default class Wall extends GameObject {
 
         this.width = TILE_SIZE;
         this.height = TILE_SIZE;
+        this.spriteIndex = 0;
         this.damage = 0;
     }
 
     get sprite() {
-        return this.sprites[this.damage];
+        return this.sprites[this.spriteIndex];
     }
 }
