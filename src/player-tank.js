@@ -6,6 +6,7 @@ export default class PlayerTank extends Tank {
     constructor(args) {
         super(args);
 
+        this.type = 'playerTank';
         this.x = PLAYER1_TANK_POSITION[0];
         this.y = PLAYER1_TANK_POSITION[1];
         this.direction = Tank.Direction.UP;
