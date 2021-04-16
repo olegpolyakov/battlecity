@@ -55,6 +55,7 @@ export default class Stage {
         this.enemyTankTimer = 0;
         this.enemyTankPositionIndex = 0;
 
+        this.events = new Map();
 
         this.objects = new Set([
             this.base,
@@ -62,6 +63,11 @@ export default class Stage {
             ...this.terrain
         ]);
 
+        this.on('bullet.hit', object => {
+            if (object.type === 'enemyTank') {
+                this._removeEnemyTank(object);
+            }
+        });
     }
 
     get width() {
@@ -86,6 +92,22 @@ export default class Stage {
 
     get left() {
         return 0;
+    }
+
+    on(event, handler) {
+        if (this.events.has(event)) {
+            this.events.get(events).add(handler);
+        } else {
+            this.events.set(event, new Set([handler]));
+        }
+    }
+
+    off(event, handler) {
+        this.events.get(event)?.delete(handler);
+    }
+
+    emit(event, arg) {
+        this.events.get(event)?.forEach(handler => handler(arg));
     }
 
     update(input, frameDelta) {
