@@ -23,7 +23,7 @@ export default class Game {
 
     start() {
         this.stage = new Stage(stages[this.stageIndex]);
-
+        this.stage.number = this.stageIndex + 1;
         this.stage.on('gameOver', this.onGameOver);
 
         requestAnimationFrame(this.loop);
@@ -33,7 +33,7 @@ export default class Game {
         const frameDelta = currentFrame - this.lastFrame;
 
         this.stage.update(this.input, frameDelta);
-        this.view.update(this.stage);
+        this.view.update(this.stage, this.player1, this.player2);
         this.frames = 0;
 
         this.lastFrame = currentFrame;
