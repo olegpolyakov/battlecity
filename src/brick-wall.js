@@ -33,16 +33,16 @@ export default class BrickWall extends Wall {
 
         switch (bullet.direction) {
             case Direction.UP:
-                this.state = this.state | 0b1000;
-                break;
-            case Direction.RIGHT:
                 this.state = this.state | 0b0001;
                 break;
-            case Direction.DOWN:
+            case Direction.RIGHT:
                 this.state = this.state | 0b0010;
                 break;
-            case Direction.LEFT:
+            case Direction.DOWN:
                 this.state = this.state | 0b0100;
+                break;
+            case Direction.LEFT:
+                this.state = this.state | 0b1000;
                 break;
         }
     }
