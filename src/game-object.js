@@ -1,12 +1,9 @@
-export default class GameObject {
-    static Direction = {
-        UP: 0,
-        RIGHT: 1,
-        DOWN: 2,
-        LEFT: 3
-    };
+import EventEmitter from './event-emitter.js';
 
+export default class GameObject extends EventEmitter {
     constructor({ x, y, width, height, sprites } = {}) {
+        super();
+
         this.x = x;
         this.y = y;
         this.width = width;
@@ -14,6 +11,8 @@ export default class GameObject {
         this.sprites = sprites;
         this.animationFrame = 0;
         this.frames = 0;
+        this.isDestructable = false;
+        this.isDestroyed = false;
     }
 
     get top() {
@@ -36,7 +35,11 @@ export default class GameObject {
 
     }
 
-    hit() {
+    move(axis, value) {
+        this[axis] += value * this.speed;
+    }
 
+    stop() {
+        this.speed = 0;
     }
 }

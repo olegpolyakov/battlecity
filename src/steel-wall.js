@@ -7,4 +7,8 @@ export default class SteelWall extends Wall {
 
         this.sprites = STEEL_WALL_SPRITES;
     }
+
+    hit(bullet) {
+        if (this.isDestroyed) return;
+    }
 }

@@ -1,5 +1,5 @@
-import { ENEMY_TANK_START_POSITIONS, ENEMY_TANK_SPRITES, ENEMY_TANK_SPEED, ENEMY_TANK_TURN_TIMER_THRESHOLD } from './constants.js';
-import { getDirectionForKeys, getAxisForDirection, getValueForDirection } from './utils.js';
+import { Direction, ENEMY_TANK_START_POSITIONS, ENEMY_TANK_SPRITES, ENEMY_TANK_SPEED, ENEMY_TANK_TURN_TIMER_THRESHOLD } from './constants.js';
+import { getAxisForDirection, getValueForDirection } from './utils.js';
 import Tank from './tank.js';
 
 export default class EnemyTank extends Tank {
@@ -15,7 +15,7 @@ export default class EnemyTank extends Tank {
         super(args);
 
         this.type = 'enemyTank';
-        this.direction = Tank.Direction.DOWN;
+        this.direction = Direction.DOWN;
         this.x = 0;
         this.y = 0;
         this.speed = ENEMY_TANK_SPEED;
@@ -31,44 +31,46 @@ export default class EnemyTank extends Tank {
 
     update({ world, frameDelta }) {
         if (this.isDestroyed) {
-            world.objects.delete(this);
+            this.explode();
+            this.destroy();
         }
 
         const direction = this.direction;
         const axis = getAxisForDirection(direction);
         const value = getValueForDirection(direction);
 
-        this._move(axis, value);
-        this._animate(frameDelta);
+        this.move(axis, value);
+        this.fire();
+        this.animate(frameDelta);
 
         const isOutOfBounds = world.isOutOfBounds(this);
         const hasCollision = world.hasCollision(this);
 
         if (isOutOfBounds || hasCollision) {
-            this._move(axis, -value);
+            this.move(axis, -value);
 
-            if (this._shouldTurn(frameDelta)) {
-                this._turnRandomly();
+            if (this.shouldTurn(frameDelta)) {
+                this.turnRandomly();
             }
         }
     }
 
     hit(bullet) {
-        if (this.isDestroyed) return;
+        if (bullet.isFromEnemyTank) return;
 
-        this.isDestroyed = true;
+        super.hit();
     }
 
-    _shouldTurn(frameDelta) {
+    shouldTurn(frameDelta) {
         this.turnTimer += frameDelta;
 
         return this.turnTimer > ENEMY_TANK_TURN_TIMER_THRESHOLD;
     }
 
-    _turnRandomly() {
+    turnRandomly() {
         const randomDirection = Math.floor(Math.random() * 4);
 
         this.turnTimer = 0;
-        this._turn(randomDirection);
+        this.turn(randomDirection);
     }
 }

@@ -1,13 +1,5 @@
-import { Direction, BRICK_WALL_SPRITES } from './constants.js';
+import { Direction, BRICK_WALL_SPRITES, BRICK_WALL_SPRITE_MAP } from './constants.js';
 import Wall from './wall.js';
-
-const BRICK_WALL_SPRITE_MAP = {
-    '0': 0,
-    '1': 1,
-    '2': 2,
-    '4': 3,
-    '8': 4
-};
 
 export default class BrickWall extends Wall {
     constructor(args) {
@@ -15,8 +7,9 @@ export default class BrickWall extends Wall {
 
         this.sprites = BRICK_WALL_SPRITES;
         this.state = 0b0000;
-        this.isHitting = false;
+        this.isDestructable = true;
         this.isDestroyed = false;
+        this.lastHitDirection = -1;
     }
 
     get sprite() {
@@ -43,13 +36,13 @@ export default class BrickWall extends Wall {
                 this.state = this.state | 0b1000;
                 break;
             case Direction.RIGHT:
-                this.state = this.state | 0b0100;
+                this.state = this.state | 0b0001;
                 break;
             case Direction.DOWN:
                 this.state = this.state | 0b0010;
                 break;
             case Direction.LEFT:
-                this.state = this.state | 0b0001;
+                this.state = this.state | 0b0100;
                 break;
         }
     }

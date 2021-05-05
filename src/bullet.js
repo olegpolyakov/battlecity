@@ -1,7 +1,7 @@
-import { BULLET_WIDTH, BULLET_HEIGHT, BULLET_SPRITES } from './constants.js';
+import { BULLET_WIDTH, BULLET_HEIGHT, BULLET_SPRITES, Direction } from './constants.js';
 import { getAxisForDirection, getValueForDirection } from './utils.js';
 import GameObject from './game-object.js';
-import Explosion from './explosion.js';
+import BulletExplosion from './bullet-explosion.js';
 
 export default class Bullet extends GameObject {
     constructor({ tank, direction, speed, ...args }) {
@@ -25,38 +25,33 @@ export default class Bullet extends GameObject {
         return Boolean(this.explosion);
     }
 
-    update({ world }) {
-        if (this.isExploding) {
-            if (this.explosion.isDestroyed) return this._destroy(world);
+    get isFromEnemyTank() {
+        return this.tank?.type === 'enemyTank';
+    }
 
-            return;
-        }
+    get isFromPlayerTank() {
+        return this.tank?.type === 'playerTank';
+    }
+
+    update({ world }) {
+        if (this.isExploding) return;
 
         const axis = getAxisForDirection(this.direction);
         const value = getValueForDirection(this.direction);
 
-        this._move(axis, value);
+        this.move(axis, value);
 
         const isOutOfBounds = world.isOutOfBounds(this);
         const collision = world.getCollision(this);
-        const shouldExplode = collision && this._collide(collision.objects);
+        const shouldExplode = isOutOfBounds || collision && this.collide(collision.objects);
 
-        if (isOutOfBounds || shouldExplode) {
-            this._explode(world);
+        if (shouldExplode) {
+            this.stop();
+            this.explode();
         }
     }
 
-    _move(axis, value) {
-        this[axis] += value * this.speed;
-    }
-
-    _destroy(world) {
-        this.tank.bullet = null;
-        this.explosion = null;
-        world.objects.delete(this);
-    }
-
-    _collide(objects) {
+    collide(objects) {
         let shouldExplode = false;
 
         for (const object of objects) {
@@ -69,22 +64,31 @@ export default class Bullet extends GameObject {
         return shouldExplode;
     }
 
-    _explode(world) {
-
-        const [x, y] = this._getExplosionStartingPosition();
-
-        this.speed = 0;
-        this.explosion = new Explosion({ x, y });
-
-        world.objects.add(this.explosion);
+    hit() {
+        this.stop();
+        this.explode();
     }
 
-    _getExplosionStartingPosition() {
+    explode() {
+        const [x, y] = this.getExplosionStartingPosition();
+
+        this.explosion = new BulletExplosion({ x, y });
+        this.explosion.on('destroyed', () => this.destroy());
+        this.emit('explode', this.explosion);
+    }
+
+    destroy() {
+        this.tank = null;
+        this.explosion = null;
+        this.emit('destroyed', this);
+    }
+
+    getExplosionStartingPosition() {
         switch (this.direction) {
-            case GameObject.Direction.UP: return [this.left - 10, this.top - 12];
-            case GameObject.Direction.RIGHT: return [this.right - 16, this.top - 12];
-            case GameObject.Direction.DOWN: return [this.left - 10, this.bottom - 16];
-            case GameObject.Direction.LEFT: return [this.left - 16, this.top - 12];
+            case Direction.UP: return [this.left - 10, this.top - 12];
+            case Direction.RIGHT: return [this.right - 16, this.top - 12];
+            case Direction.DOWN: return [this.left - 10, this.bottom - 16];
+            case Direction.LEFT: return [this.left - 16, this.top - 12];
         }
     }
 }

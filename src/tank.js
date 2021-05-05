@@ -1,7 +1,7 @@
-import { TILE_SIZE, TANK_WIDTH, TANK_HEIGHT, TANK_SPEED, TANK_TURN_THRESHOLD } from './constants.js';
-import { getAxisForDirection } from './utils.js';
+import { Direction, TILE_SIZE, TANK_WIDTH, TANK_HEIGHT, TANK_SPEED, TANK_TURN_THRESHOLD } from './constants.js';
 import GameObject from './game-object.js';
 import Bullet from './bullet.js';
+import TankExplosion from './tank-explosion.js';
 
 export default class Tank extends GameObject {
     constructor(args) {
@@ -12,26 +12,30 @@ export default class Tank extends GameObject {
         this.speed = TANK_SPEED;
         this.bulletSpeed = 4;
         this.bullet = null;
-        this.isDestroyed = false;
+        this.explosion = null;
     }
 
     get sprite() {
         return this.sprites[this.direction * 2 + this.animationFrame];
     }
 
-    _turn(direction) {
+    get isExploding() {
+        return Boolean(this.explosion?.isExploding);
+    }
+
+    turn(direction) {
         const prevDirection = this.direction;
 
         this.direction = direction;
 
-        if (direction === GameObject.Direction.UP || direction === GameObject.Direction.DOWN) {
-            if (prevDirection === GameObject.Direction.RIGHT) {
+        if (direction === Direction.UP || direction === Direction.DOWN) {
+            if (prevDirection === Direction.RIGHT) {
                 const value = TILE_SIZE - (this.x % TILE_SIZE);
 
                 if (value <= TANK_TURN_THRESHOLD) {
                     this.x += value;
                 }
-            } else if (prevDirection === GameObject.Direction.LEFT) {
+            } else if (prevDirection === Direction.LEFT) {
                 const value = this.x % TILE_SIZE;
 
                 if (value <= TANK_TURN_THRESHOLD) {
@@ -39,13 +43,13 @@ export default class Tank extends GameObject {
                 }
             }
         } else {
-            if (prevDirection === GameObject.Direction.UP) {
+            if (prevDirection === Direction.UP) {
                 const value = this.y % TILE_SIZE;
 
                 if (value <= TANK_TURN_THRESHOLD) {
                     this.y -= value;
                 }
-            } else if (prevDirection === GameObject.Direction.DOWN) {
+            } else if (prevDirection === Direction.DOWN) {
                 const value = TILE_SIZE - (this.y % TILE_SIZE);
 
                 if (value <= TANK_TURN_THRESHOLD) {
@@ -55,27 +59,7 @@ export default class Tank extends GameObject {
         }
     }
 
-    _move(axis, value) {
-        this[axis] += value * this.speed;
-    }
-
-    _fire() {
-        if (!this.bullet) {
-            const [x, y] = this._getBulletStartingPosition();
-
-            const bullet = new Bullet({
-                x,
-                y,
-                tank: this,
-                direction: this.direction,
-                speed: this.bulletSpeed
-            });
-
-            this.bullet = bullet;
-        }
-    }
-
-    _animate(frameDelta) {
+    animate(frameDelta) {
         this.frames += frameDelta;
 
         if (this.frames > 20) {
@@ -84,12 +68,63 @@ export default class Tank extends GameObject {
         }
     }
 
-    _getBulletStartingPosition() {
+    fire() {
+        if (!this.bullet) {
+            console.log('FIRE');
+            const [x, y] = this.getBulletStartingPosition();
+
+            this.bullet = new Bullet({
+                x,
+                y,
+                tank: this,
+                direction: this.direction,
+                speed: this.bulletSpeed
+            });
+
+            this.bullet.on('destroyed', () => {
+                this.bullet = null;
+            });
+
+            this.emit('fire', this.bullet);
+        }
+    }
+
+    hit() {
+        this.explode();
+        this.destroy();
+    }
+
+    explode() {
+        if (this.isExploding) return;
+
+        const [x, y] = this.getExplosionStartingPosition();
+
+        this.explosion = new TankExplosion({ x, y });
+        this.emit('explode', this.explosion);
+    }
+
+    destroy() {
+        this.isDestroyed = true;
+        this.bullet = null;
+        this.explosion = null;
+        this.emit('destroyed', this);
+    }
+
+    getBulletStartingPosition() {
         switch (this.direction) {
-            case Tank.Direction.UP: return [this.left + 10, this.top];
-            case Tank.Direction.RIGHT: return [this.right - 8, this.top + 12];
-            case Tank.Direction.DOWN: return [this.left + 10, this.bottom - 8];
-            case Tank.Direction.LEFT: return [this.left, this.top + 12];
+            case Direction.UP: return [this.left + 12, this.top - 4];
+            case Direction.RIGHT: return [this.right - 8, this.top + 12];
+            case Direction.DOWN: return [this.left + 10, this.bottom - 8];
+            case Direction.LEFT: return [this.left, this.top + 12];
+        }
+    }
+
+    getExplosionStartingPosition() {
+        switch (this.direction) {
+            case Direction.UP: return [this.left + 10, this.top];
+            case Direction.RIGHT: return [this.right - 8, this.top + 12];
+            case Direction.DOWN: return [this.left + 10, this.bottom - 8];
+            case Direction.LEFT: return [this.left, this.top + 12];
         }
     }
 }
