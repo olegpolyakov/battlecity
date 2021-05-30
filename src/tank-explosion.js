@@ -1,4 +1,4 @@
-import { TANK_EXPLOSION_WIDTH, TANK_EXPLOSION_HEIGHT, TANK_EXPLOSION_SPEED, TANK_EXPLOSION_SPRITES } from './constants.js';
+import { TANK_EXPLOSION_WIDTH, TANK_EXPLOSION_HEIGHT, TANK_EXPLOSION_ANIMATION_SPEED, TANK_EXPLOSION_SPRITES } from './constants.js';
 import Explosion from './explosion.js';
 
 export default class TankExplosion extends Explosion {
@@ -7,7 +7,7 @@ export default class TankExplosion extends Explosion {
 
         this.width = TANK_EXPLOSION_WIDTH;
         this.height = TANK_EXPLOSION_HEIGHT;
-        this.speed = TANK_EXPLOSION_SPEED;
         this.sprites = TANK_EXPLOSION_SPRITES;
+        this.animationSpeed = TANK_EXPLOSION_ANIMATION_SPEED;
     }
 }

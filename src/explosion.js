@@ -15,7 +15,7 @@ export default class Explosion extends GameObject {
         return this.animationFrame < this.sprites.length;
     }
 
-    update({ world, frameDelta }) {
+    update({ frameDelta }) {
         if (this.isExploding) {
             this.animate(frameDelta);
         } else {
@@ -26,8 +26,8 @@ export default class Explosion extends GameObject {
     animate(frameDelta) {
         this.frames += frameDelta;
 
-        if (this.frames > 50) {
-            this.animationFrame = (this.animationFrame + 1) % this.sprites.length + 1;
+        if (this.frames > this.animationSpeed) {
+            this.animationFrame = (this.animationFrame + 1) % (this.sprites.length + 1);
             this.frames = 0;
         }
     }

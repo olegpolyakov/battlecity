@@ -10,6 +10,7 @@ export default class GameObject extends EventEmitter {
         this.height = height;
         this.sprites = sprites;
         this.animationFrame = 0;
+        this.animationSpeed = 0;
         this.frames = 0;
         this.isDestructable = false;
         this.isDestroyed = false;
