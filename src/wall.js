@@ -6,6 +6,7 @@ export default class Wall extends GameObject {
     constructor({ type, ...rest }) {
         super(rest);
 
+        this.type = 'wall';
         this.width = TILE_SIZE;
         this.height = TILE_SIZE;
         this.spriteIndex = 0;
