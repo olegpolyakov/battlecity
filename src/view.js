@@ -111,7 +111,7 @@ export default class View {
             this.context.drawImage(
                 this.sprite.image,
                 UNIT_SIZE * 18,
-                UNIT_SIZE * 5.75,
+                UNIT_SIZE * 5.5,
                 TILE_SIZE,
                 TILE_SIZE,
                 PANEL_X + x * TILE_SIZE + 16,
@@ -132,8 +132,8 @@ export default class View {
     renderPlayer1Lives(player1) {
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 23.5,
-            UNIT_SIZE * 8.5,
+            UNIT_SIZE * 16,
+            UNIT_SIZE * 6,
             UNIT_SIZE,
             TILE_SIZE,
             PANEL_X + TILE_SIZE,
@@ -144,8 +144,8 @@ export default class View {
 
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 23.5,
-            UNIT_SIZE * 9,
+            UNIT_SIZE * 16,
+            UNIT_SIZE * 6.5,
             TILE_SIZE,
             TILE_SIZE,
             PANEL_X + TILE_SIZE,
@@ -157,7 +157,7 @@ export default class View {
         this.context.drawImage(
             this.sprite.image,
             UNIT_SIZE * 19.5,
-            UNIT_SIZE * 5.25,
+            UNIT_SIZE * 5,
             TILE_SIZE,
             TILE_SIZE,
             PANEL_X + TILE_SIZE * 2,
@@ -170,8 +170,8 @@ export default class View {
     renderStageNumber(stage) {
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 23.5,
-            UNIT_SIZE * 11.5,
+            UNIT_SIZE * 18,
+            UNIT_SIZE * 6,
             UNIT_SIZE,
             UNIT_SIZE,
             PANEL_X + TILE_SIZE,
@@ -182,8 +182,8 @@ export default class View {
 
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 19.5,
-            UNIT_SIZE * 5.25,
+            UNIT_SIZE * 19,
+            UNIT_SIZE * 5,
             TILE_SIZE,
             TILE_SIZE,
             PANEL_X + TILE_SIZE * 2,
