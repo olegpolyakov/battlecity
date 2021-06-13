@@ -117,7 +117,7 @@ export const PLAYER1_TANK_SPRITES = [
 export const TANK_WIDTH = UNIT_SIZE;
 export const TANK_HEIGHT = UNIT_SIZE;
 export const TANK_SPEED = 2;
-export const TANK_TURN_THRESHOLD = 8;
+export const TANK_TURN_THRESHOLD = TILE_SIZE * 0.5;
 export const TANK_ANIMATION_FRAME = 20;
 
 export const TANK_EXPLOSION_ANIMATION_SPEED = 100;
