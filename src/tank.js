@@ -29,31 +29,37 @@ export default class Tank extends GameObject {
         this.direction = direction;
 
         if (direction === Direction.UP || direction === Direction.DOWN) {
-            if (prevDirection === Direction.RIGHT) {
-                const value = TILE_SIZE - (this.x % TILE_SIZE);
+            const deltaRight = this.x % TILE_SIZE;
+            const deltaLeft = TILE_SIZE - deltaRight;
 
-                if (value <= TANK_TURN_THRESHOLD) {
-                    this.x += value;
+            if (prevDirection === Direction.RIGHT) {
+                if (deltaRight >= TANK_TURN_THRESHOLD) {
+                    this.x += deltaLeft;
+                } else {
+                    this.x -= deltaRight;
                 }
             } else if (prevDirection === Direction.LEFT) {
-                const value = this.x % TILE_SIZE;
-
-                if (value <= TANK_TURN_THRESHOLD) {
-                    this.x -= value;
+                if (deltaLeft >= TANK_TURN_THRESHOLD) {
+                    this.x -= deltaRight;
+                } else {
+                    this.x += deltaLeft;
                 }
             }
         } else {
-            if (prevDirection === Direction.UP) {
-                const value = this.y % TILE_SIZE;
+            const deltaBottom = this.y % TILE_SIZE;
+            const deltaTop = TILE_SIZE - deltaBottom;
 
-                if (value <= TANK_TURN_THRESHOLD) {
-                    this.y -= value;
+            if (prevDirection === Direction.UP) {
+                if (deltaTop >= TANK_TURN_THRESHOLD) {
+                    this.y -= deltaBottom;
+                } else {
+                    this.y += deltaTop;
                 }
             } else if (prevDirection === Direction.DOWN) {
-                const value = TILE_SIZE - (this.y % TILE_SIZE);
-
-                if (value <= TANK_TURN_THRESHOLD) {
-                    this.y += value;
+                if (deltaBottom >= TANK_TURN_THRESHOLD) {
+                    this.y += deltaTop;
+                } else {
+                    this.y -= deltaBottom;
                 }
             }
         }
@@ -102,6 +108,7 @@ export default class Tank extends GameObject {
             x,
             y
         });
+
         this.emit('explode', this.explosion);
     }
 
@@ -109,6 +116,7 @@ export default class Tank extends GameObject {
         this.isDestroyed = true;
         this.bullet = null;
         this.explosion = null;
+
         this.emit('destroyed', this);
     }
 
