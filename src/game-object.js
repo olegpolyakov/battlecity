@@ -1,6 +1,41 @@
+import { Direction } from './constants.js';
 import EventEmitter from './event-emitter.js';
 
 export default class GameObject extends EventEmitter {
+    static getDirectionForKeys(keys) {
+        if (keys.has('ArrowUp')) {
+            return Direction.UP;
+        } else if (keys.has('ArrowRight')) {
+            return Direction.RIGHT;
+        } else if (keys.has('ArrowDown')) {
+            return Direction.DOWN;
+        } else if (keys.has('ArrowLeft')) {
+            return Direction.LEFT;
+        }
+    }
+
+    static getAxisForDirection(direction) {
+        return direction % 2 === 0 ? 'y' : 'x';
+    }
+
+    static getValueForDirection(direction) {
+        switch (direction) {
+            case Direction.UP: return -1;
+            case Direction.RIGHT: return 1;
+            case Direction.DOWN: return 1;
+            case Direction.LEFT: return -1;
+        }
+    }
+
+    static getSideForDirection(direction) {
+        switch (direction) {
+            case Direction.UP: return 'top';
+            case Direction.RIGHT: return 'right';
+            case Direction.DOWN: return 'bottom';
+            case Direction.LEFT: return 'left';
+        }
+    }
+
     constructor({ x, y, width, height, sprites } = {}) {
         super();
 

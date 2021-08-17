@@ -1,5 +1,4 @@
 import { BULLET_WIDTH, BULLET_HEIGHT, BULLET_SPRITES, Direction } from './constants.js';
-import { getAxisForDirection, getValueForDirection } from './utils.js';
 import GameObject from './game-object.js';
 import BulletExplosion from './bullet-explosion.js';
 
@@ -36,8 +35,8 @@ export default class Bullet extends GameObject {
     update({ world }) {
         if (this.isExploding) return;
 
-        const axis = getAxisForDirection(this.direction);
-        const value = getValueForDirection(this.direction);
+        const axis = GameObject.getAxisForDirection(this.direction);
+        const value = GameObject.getValueForDirection(this.direction);
 
         this.move(axis, value);
 

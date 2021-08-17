@@ -1,5 +1,4 @@
-import { Keys, Direction, PLAYER1_TANK_POSITION, PLAYER1_TANK_SPRITES, TANK_SPEED } from './constants.js';
-import { getDirectionForKeys, getAxisForDirection, getValueForDirection } from './utils.js';
+import { Key, Direction, PLAYER1_TANK_POSITION, PLAYER1_TANK_SPRITES, TANK_SPEED } from './constants.js';
 import Tank from './tank.js';
 
 export default class PlayerTank extends Tank {
@@ -15,10 +14,10 @@ export default class PlayerTank extends Tank {
     }
 
     update({ input, frameDelta, world }) {
-        if (input.has(Keys.UP, Keys.RIGHT, Keys.DOWN, Keys.LEFT)) {
-            const direction = getDirectionForKeys(input.keys);
-            const axis = getAxisForDirection(direction);
-            const value = getValueForDirection(direction);
+        if (input.has(Key.UP, Key.RIGHT, Key.DOWN, Key.LEFT)) {
+            const direction = Tank.getDirectionForKeys(input.keys);
+            const axis = Tank.getAxisForDirection(direction);
+            const value = Tank.getValueForDirection(direction);
 
             this.turn(direction);
             this.move(axis, value);
@@ -32,7 +31,7 @@ export default class PlayerTank extends Tank {
             }
         }
 
-        if (input.keys.has(Keys.SPACE)) {
+        if (input.keys.has(Key.SPACE)) {
             this.fire();
         }
     }

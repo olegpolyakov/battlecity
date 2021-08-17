@@ -1,5 +1,4 @@
 import { Direction, ENEMY_TANK_START_POSITIONS, ENEMY_TANK_SPRITES, ENEMY_TANK_SPEED, ENEMY_TANK_TURN_TIMER_THRESHOLD } from './constants.js';
-import { getAxisForDirection, getValueForDirection } from './utils.js';
 import Tank from './tank.js';
 
 export default class EnemyTank extends Tank {
@@ -15,9 +14,9 @@ export default class EnemyTank extends Tank {
         super(args);
 
         this.type = 'enemyTank';
-        this.direction = Direction.DOWN;
         this.x = 0;
         this.y = 0;
+        this.direction = Direction.DOWN;
         this.speed = ENEMY_TANK_SPEED;
         this.sprites = ENEMY_TANK_SPRITES[0];
 
@@ -36,8 +35,8 @@ export default class EnemyTank extends Tank {
         }
 
         const direction = this.direction;
-        const axis = getAxisForDirection(direction);
-        const value = getValueForDirection(direction);
+        const axis = Tank.getAxisForDirection(direction);
+        const value = Tank.getValueForDirection(direction);
 
         this.move(axis, value);
         this.fire();
