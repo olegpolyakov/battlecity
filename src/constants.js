@@ -3,7 +3,7 @@ export const TILE_SIZE = 16;
 export const UNIT_SIZE = 32;
 export const STAGE_SIZE = NUMBER_OF_UNITS * UNIT_SIZE;
 
-export const Keys = {
+export const Key = {
     UP: 'ArrowUp',
     RIGHT: 'ArrowRight',
     DOWN: 'ArrowDown',
