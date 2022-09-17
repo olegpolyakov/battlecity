@@ -31,8 +31,8 @@ export const BASE_POSITION = [6 * UNIT_SIZE, 12 * UNIT_SIZE];
 export const BASE_WIDTH = UNIT_SIZE;
 export const BASE_HEIGHT = UNIT_SIZE;
 export const BASE_SPRITES = [
-    [8 * UNIT_SIZE, 8 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
-    [9 * UNIT_SIZE, 8 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE]
+    [11 * UNIT_SIZE, 7.5 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [12 * UNIT_SIZE, 7.5 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE]
 ];
 
 export const BRICK_WALL_SPRITES = [
@@ -42,18 +42,18 @@ export const BRICK_WALL_SPRITES = [
     [11 * UNIT_SIZE, 4 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE], // bottom 8/16
     [12 * UNIT_SIZE, 4 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE], // left 8/16
     [8 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // 1/4
-    [13 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top left 3/4
-    [13.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top right 3/4
-    [13.5 * UNIT_SIZE, 4.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom right 3/4
-    [13 * UNIT_SIZE, 4.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom left 3/4
-    [14 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top 2/4
-    [14.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // right 2/4
-    [14.5 * UNIT_SIZE, 4.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom 2/4
-    [14 * UNIT_SIZE, 4.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // left 2/4
-    [15 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top left 1/4
-    [15.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top right 1/4
-    [15.5 * UNIT_SIZE, 4.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom right 1/4
-    [15 * UNIT_SIZE, 4.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom left 1/4
+    [8.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top left 3/4
+    [9 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top right 3/4
+    [9.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom right 3/4
+    [10 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom left 3/4
+    [12 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top 2/4
+    [11.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // right 2/4
+    [11 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom 2/4
+    [10.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // left 2/4
+    [12.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top left 1/4
+    [13 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top right 1/4
+    [13.5 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom right 1/4
+    [14 * UNIT_SIZE, 4 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom left 1/4
 ];
 export const BRICK_WALL_SPRITE_MAP = {
     '0': 5,
@@ -131,10 +131,25 @@ export const TANK_EXPLOSION_SPRITES = [
 ];
 
 export const STEEL_WALL_SPRITES = [
-    [8 * UNIT_SIZE, 5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // 1/4
-    [8 * UNIT_SIZE, 5 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE], // full
-    [9 * UNIT_SIZE, 5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top
-    [10 * UNIT_SIZE, 5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // right
-    [11 * UNIT_SIZE, 5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom
-    [12 * UNIT_SIZE, 5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE] // left
+    [8 * UNIT_SIZE, 6.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // 1/4
+    [8 * UNIT_SIZE, 6.5 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE], // full
+    [9 * UNIT_SIZE, 6.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // top
+    [10 * UNIT_SIZE, 6.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // right
+    [11 * UNIT_SIZE, 6.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // bottom
+    [12 * UNIT_SIZE, 6.5 * UNIT_SIZE, TILE_SIZE, TILE_SIZE] // left
+];
+
+export const STAGE_NUMBER_SPRITES = [
+    [23.5 * UNIT_SIZE, 11.5 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE], // flag
+    [19 * UNIT_SIZE, 5.25 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // stage number
+];
+
+export const PLAYER1_LIVES_SPRITES = [
+    [23.5 * UNIT_SIZE, 8.5 * UNIT_SIZE, UNIT_SIZE, TILE_SIZE], // 1P
+    [23.5 * UNIT_SIZE, 9 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // tank icon
+    [19.5 * UNIT_SIZE, 5.25 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // number
+];
+
+export const ENEMY_TANK_ICONS_SPRITES = [
+    [18 * UNIT_SIZE, 5.5 * UNIT_SIZE, TILE_SIZE, UNIT_SIZE],
 ];
