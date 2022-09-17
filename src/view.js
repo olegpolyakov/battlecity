@@ -1,4 +1,11 @@
-import { NUMBER_OF_UNITS, UNIT_SIZE, TILE_SIZE } from './constants.js';
+import {
+    NUMBER_OF_UNITS,
+    UNIT_SIZE,
+    TILE_SIZE,
+    STAGE_NUMBER_SPRITES,
+    ENEMY_TANK_ICONS_SPRITES,
+    PLAYER1_LIVES_SPRITES,
+} from './constants.js';
 
 const PLAYFIELD_X = UNIT_SIZE;
 const PLAYFIELD_Y = UNIT_SIZE;
@@ -110,14 +117,11 @@ export default class View {
         for (let i = 0, x = 0, y = 0; i < enemyTanks.length; i++) {
             this.context.drawImage(
                 this.sprite.image,
-                UNIT_SIZE * 18,
-                UNIT_SIZE * 5.5,
-                TILE_SIZE,
-                TILE_SIZE,
+                ...ENEMY_TANK_ICONS_SPRITES[0],
                 PANEL_X + x * TILE_SIZE + 16,
                 PANEL_Y + y * TILE_SIZE + 16,
                 TILE_SIZE,
-                TILE_SIZE
+                UNIT_SIZE
             );
 
             if (x === 1) {
@@ -132,10 +136,7 @@ export default class View {
     renderPlayer1Lives(player1) {
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 16,
-            UNIT_SIZE * 6,
-            UNIT_SIZE,
-            TILE_SIZE,
+            ...PLAYER1_LIVES_SPRITES[0],
             PANEL_X + TILE_SIZE,
             PANEL_Y + PANEL_HEIGHT * 0.5,
             UNIT_SIZE,
@@ -144,10 +145,7 @@ export default class View {
 
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 16,
-            UNIT_SIZE * 6.5,
-            TILE_SIZE,
-            TILE_SIZE,
+            ...PLAYER1_LIVES_SPRITES[1],
             PANEL_X + TILE_SIZE,
             PANEL_Y + PANEL_HEIGHT * 0.5 + TILE_SIZE,
             TILE_SIZE,
@@ -156,10 +154,7 @@ export default class View {
 
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 19.5,
-            UNIT_SIZE * 5,
-            TILE_SIZE,
-            TILE_SIZE,
+            ...PLAYER1_LIVES_SPRITES[2],
             PANEL_X + TILE_SIZE * 2,
             PANEL_Y + PANEL_HEIGHT * 0.5 + TILE_SIZE,
             TILE_SIZE,
@@ -170,10 +165,7 @@ export default class View {
     renderStageNumber(stage) {
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 18,
-            UNIT_SIZE * 6,
-            UNIT_SIZE,
-            UNIT_SIZE,
+            ...STAGE_NUMBER_SPRITES[0],
             PANEL_X + TILE_SIZE,
             PANEL_Y + PANEL_HEIGHT * 0.75,
             UNIT_SIZE,
@@ -182,10 +174,7 @@ export default class View {
 
         this.context.drawImage(
             this.sprite.image,
-            UNIT_SIZE * 19,
-            UNIT_SIZE * 5,
-            TILE_SIZE,
-            TILE_SIZE,
+            ...STAGE_NUMBER_SPRITES[1],
             PANEL_X + TILE_SIZE * 2,
             PANEL_Y + PANEL_HEIGHT * 0.75 + UNIT_SIZE,
             TILE_SIZE,
