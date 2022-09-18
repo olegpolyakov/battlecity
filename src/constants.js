@@ -4,11 +4,16 @@ export const UNIT_SIZE = 32;
 export const STAGE_SIZE = NUMBER_OF_UNITS * UNIT_SIZE;
 
 export const Key = {
-    UP: 'ArrowUp',
-    RIGHT: 'ArrowRight',
-    DOWN: 'ArrowDown',
-    LEFT: 'ArrowLeft',
-    SPACE: 'Space'
+    PLAYER1_UP: 'ArrowUp',
+    PLAYER1_LEFT: 'ArrowLeft',
+    PLAYER1_DOWN: 'ArrowDown',
+    PLAYER1_RIGHT: 'ArrowRight',
+    PLAYER1_FIRE: 'Space',
+    PLAYER2_UP: 'KeyW',
+    PLAYER2_LEFT: 'KeyA',
+    PLAYER2_DOWN: 'KeyS',
+    PLAYER2_RIGHT: 'KeyD',
+    PLAYER2_FIRE: 'AltLeft'
 };
 
 export const Direction = {
@@ -114,6 +119,18 @@ export const PLAYER1_TANK_SPRITES = [
     [7 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE]
 ];
 
+export const PLAYER2_TANK_POSITION = [8 * UNIT_SIZE, 12 * UNIT_SIZE];
+export const PLAYER2_TANK_SPRITES = [
+    [8 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [9 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [10 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [11 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [12 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [13 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [14 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE],
+    [15 * UNIT_SIZE, 0 * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE]
+];
+
 export const TANK_WIDTH = UNIT_SIZE;
 export const TANK_HEIGHT = UNIT_SIZE;
 export const TANK_SPEED = 2;
@@ -150,6 +167,14 @@ export const PLAYER1_LIVES_SPRITES = [
     [19.5 * UNIT_SIZE, 5.25 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // number
 ];
 
+export const PLAYER2_LIVES_SPRITES = [
+    [23.5 * UNIT_SIZE, 10 * UNIT_SIZE, UNIT_SIZE, TILE_SIZE], // 1P
+    [23.5 * UNIT_SIZE, 9 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // tank icon
+    [19.5 * UNIT_SIZE, 5.25 * UNIT_SIZE, TILE_SIZE, TILE_SIZE], // number
+];
+
 export const ENEMY_TANK_ICONS_SPRITES = [
     [18 * UNIT_SIZE, 5.5 * UNIT_SIZE, TILE_SIZE, UNIT_SIZE],
 ];
+
+export const ENABLE_SECOND_PLAYER = true;

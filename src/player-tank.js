@@ -5,16 +5,14 @@ export default class PlayerTank extends Tank {
     constructor(args) {
         super(args);
 
-        this.type = 'playerTank';
-        this.x = PLAYER1_TANK_POSITION[0];
-        this.y = PLAYER1_TANK_POSITION[1];
         this.direction = Direction.UP;
         this.speed = TANK_SPEED;
-        this.sprites = PLAYER1_TANK_SPRITES;
+        this.movementKeys = [];
+        this.fireKeys = [];
     }
 
     update({ input, frameDelta, world }) {
-        if (input.has(Key.UP, Key.RIGHT, Key.DOWN, Key.LEFT)) {
+        if (input.has(...this.movementKeys)) {
             const direction = Tank.getDirectionForKeys(input.keys);
             const axis = Tank.getAxisForDirection(direction);
             const value = Tank.getValueForDirection(direction);
@@ -31,7 +29,7 @@ export default class PlayerTank extends Tank {
             }
         }
 
-        if (input.keys.has(Key.SPACE)) {
+        if (input.has(...this.fireKeys)) {
             this.fire();
         }
     }

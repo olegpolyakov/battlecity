@@ -1,15 +1,15 @@
-import { Direction } from './constants.js';
+import { Key, Direction } from './constants.js';
 import EventEmitter from './event-emitter.js';
 
 export default class GameObject extends EventEmitter {
     static getDirectionForKeys(keys) {
-        if (keys.has('ArrowUp')) {
+        if (keys.has(Key.PLAYER1_UP) || keys.has(Key.PLAYER2_UP)) {
             return Direction.UP;
-        } else if (keys.has('ArrowRight')) {
+        } else if (keys.has(Key.PLAYER1_RIGHT) || keys.has(Key.PLAYER2_RIGHT)) {
             return Direction.RIGHT;
-        } else if (keys.has('ArrowDown')) {
+        } else if (keys.has(Key.PLAYER1_DOWN) || keys.has(Key.PLAYER2_DOWN)) {
             return Direction.DOWN;
-        } else if (keys.has('ArrowLeft')) {
+        } else if (keys.has(Key.PLAYER1_LEFT) || keys.has(Key.PLAYER2_LEFT)) {
             return Direction.LEFT;
         }
     }

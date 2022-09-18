@@ -29,7 +29,7 @@ export default class Bullet extends GameObject {
     }
 
     get isFromPlayerTank() {
-        return this.tank?.type === 'playerTank';
+        return this.tank?.type === 'player1Tank' || this.tank?.type === 'player2Tank';
     }
 
     update({ world }) {
@@ -85,7 +85,8 @@ export default class Bullet extends GameObject {
     shouldCollide(object) {
         return (
             object.type === 'wall' ||
-            (object.type === 'playerTank' && this.isFromEnemyTank) ||
+            (object.type === 'player1Tank' && this.isFromEnemyTank) ||
+            (object.type === 'player2Tank' && this.isFromEnemyTank) ||
             (object.type === 'enemyTank' && this.isFromPlayerTank) ||
             (object.type === 'bullet' && this.isFromEnemyTank && object.isFromPlayerTank) ||
             (object.type === 'bullet' && this.isFromPlayerTank && object.isFromEnemyTank)

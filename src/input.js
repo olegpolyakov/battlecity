@@ -1,3 +1,5 @@
+import { Key } from './constants.js';
+
 export default class Input {
     constructor() {
         this.keys = new Set();
@@ -7,12 +9,17 @@ export default class Input {
     init() {
         document.addEventListener('keydown', event => {
             switch (event.code) {
-                case 'ArrowUp':
-                case 'ArrowRight':
-                case 'ArrowDown':
-                case 'ArrowLeft':
-                case 'Space':
+                case Key.PLAYER1_UP:
+                case Key.PLAYER1_LEFT:
+                case Key.PLAYER1_DOWN:
+                case Key.PLAYER1_RIGHT:
+                case Key.PLAYER1_FIRE:
                 case 'Enter':
+                case Key.PLAYER2_UP:
+                case Key.PLAYER2_LEFT:
+                case Key.PLAYER2_DOWN:
+                case Key.PLAYER2_RIGHT:
+                case Key.PLAYER2_FIRE:
                     event.preventDefault();
                     this.keys.add(event.code);
             }
@@ -20,12 +27,17 @@ export default class Input {
 
         document.addEventListener('keyup', event => {
             switch (event.code) {
-                case 'ArrowUp':
-                case 'ArrowRight':
-                case 'ArrowDown':
-                case 'ArrowLeft':
-                case 'Space':
+                case Key.PLAYER1_UP:
+                case Key.PLAYER1_LEFT:
+                case Key.PLAYER1_DOWN:
+                case Key.PLAYER1_RIGHT:
+                case Key.PLAYER1_FIRE:
                 case 'Enter':
+                case Key.PLAYER2_UP:
+                case Key.PLAYER2_LEFT:
+                case Key.PLAYER2_DOWN:
+                case Key.PLAYER2_RIGHT:
+                case Key.PLAYER2_FIRE:
                     event.preventDefault();
                     this.keys.delete(event.code);
             }

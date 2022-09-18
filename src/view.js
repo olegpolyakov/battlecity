@@ -5,6 +5,7 @@ import {
     STAGE_NUMBER_SPRITES,
     ENEMY_TANK_ICONS_SPRITES,
     PLAYER1_LIVES_SPRITES,
+    PLAYER2_LIVES_SPRITES,
 } from './constants.js';
 
 const PLAYFIELD_X = UNIT_SIZE;
@@ -80,6 +81,7 @@ export default class View {
     renderPanel(stage, player1, player2) {
         this.renderEnemyTankIcons(stage.enemyTanks);
         this.renderPlayer1Lives(player1);
+        this.renderPlayer2Lives(player2);
         this.renderStageNumber(stage);
     }
 
@@ -134,11 +136,14 @@ export default class View {
     }
 
     renderPlayer1Lives(player1) {
+        let top_x_position = PANEL_X + TILE_SIZE;
+        let top_y_position = PANEL_Y + PANEL_HEIGHT * 0.5;
+
         this.context.drawImage(
             this.sprite.image,
             ...PLAYER1_LIVES_SPRITES[0],
-            PANEL_X + TILE_SIZE,
-            PANEL_Y + PANEL_HEIGHT * 0.5,
+            top_x_position,
+            top_y_position,
             UNIT_SIZE,
             TILE_SIZE
         );
@@ -146,8 +151,8 @@ export default class View {
         this.context.drawImage(
             this.sprite.image,
             ...PLAYER1_LIVES_SPRITES[1],
-            PANEL_X + TILE_SIZE,
-            PANEL_Y + PANEL_HEIGHT * 0.5 + TILE_SIZE,
+            top_x_position,
+            top_y_position + TILE_SIZE,
             TILE_SIZE,
             TILE_SIZE
         );
@@ -155,8 +160,40 @@ export default class View {
         this.context.drawImage(
             this.sprite.image,
             ...PLAYER1_LIVES_SPRITES[2],
-            PANEL_X + TILE_SIZE * 2,
-            PANEL_Y + PANEL_HEIGHT * 0.5 + TILE_SIZE,
+            top_x_position + TILE_SIZE,
+            top_y_position + TILE_SIZE,
+            TILE_SIZE,
+            TILE_SIZE
+        );
+    }
+
+    renderPlayer2Lives(player2) {
+        let top_x_position = PANEL_X + TILE_SIZE;
+        let top_y_position = PANEL_Y + PANEL_HEIGHT * 0.5 + UNIT_SIZE + TILE_SIZE;
+
+        this.context.drawImage(
+            this.sprite.image,
+            ...PLAYER2_LIVES_SPRITES[0],
+            top_x_position,
+            top_y_position,
+            UNIT_SIZE,
+            TILE_SIZE
+        );
+
+        this.context.drawImage(
+            this.sprite.image,
+            ...PLAYER2_LIVES_SPRITES[1],
+            top_x_position,
+            top_y_position + TILE_SIZE,
+            TILE_SIZE,
+            TILE_SIZE
+        );
+
+        this.context.drawImage(
+            this.sprite.image,
+            ...PLAYER2_LIVES_SPRITES[2],
+            top_x_position + TILE_SIZE,
+            top_y_position + TILE_SIZE,
             TILE_SIZE,
             TILE_SIZE
         );
