@@ -40,13 +40,12 @@ export default class Bullet extends GameObject {
 
         this.move(axis, value);
 
-        const isOutOfBounds = world.isOutOfBounds(this);
-        const collision = world.getCollision(this);
-        const shouldExplode = isOutOfBounds || collision && this.collide(collision.objects);
+        if (world.isOutOfBounds(this)) return this.stop();
 
-        if (shouldExplode) {
-            this.stop();
-            this.explode();
+        const collision = world.getCollision(this);
+
+        if (collision) {
+            this.collide(collision.objects);
         }
     }
 
@@ -60,7 +59,24 @@ export default class Bullet extends GameObject {
             shouldExplode = this.shouldExplode(object);
         }
 
-        return shouldExplode;
+        if (shouldExplode) {
+            this.stop();
+            this.explode();
+        }
+    }
+
+    shouldCollide(object) {
+        return (
+            object.type === 'wall' ||
+            (object.type === 'playerTank' && this.isFromEnemyTank) ||
+            (object.type === 'enemyTank' && this.isFromPlayerTank) ||
+            (object.type === 'bullet' && this.isFromEnemyTank && object.isFromPlayerTank) ||
+            (object.type === 'bullet' && this.isFromPlayerTank && object.isFromEnemyTank)
+        );
+    }
+
+    shouldExplode(object) {
+        return object.type !== 'bullet';
     }
 
     hit() {
@@ -80,20 +96,6 @@ export default class Bullet extends GameObject {
         this.tank = null;
         this.explosion = null;
         this.emit('destroyed', this);
-    }
-
-    shouldCollide(object) {
-        return (
-            object.type === 'wall' ||
-            (object.type === 'playerTank' && this.isFromEnemyTank) ||
-            (object.type === 'enemyTank' && this.isFromPlayerTank) ||
-            (object.type === 'bullet' && this.isFromEnemyTank && object.isFromPlayerTank) ||
-            (object.type === 'bullet' && this.isFromPlayerTank && object.isFromEnemyTank)
-        );
-    }
-
-    shouldExplode(object) {
-        return object.type !== 'bullet';
     }
 
     getExplosionStartingPosition() {

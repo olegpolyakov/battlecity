@@ -39,6 +39,30 @@ export default class Stage extends EventEmitter {
         return types.map(type => new EnemyTank({ type }));
     }
 
+    get width() {
+        return STAGE_SIZE;
+    }
+
+    get height() {
+        return STAGE_SIZE;
+    }
+
+    get top() {
+        return 0;
+    }
+
+    get right() {
+        return this.width;
+    }
+
+    get bottom() {
+        return this.height;
+    }
+
+    get left() {
+        return 0;
+    }
+
     constructor(data) {
         super();
 
@@ -111,30 +135,6 @@ export default class Stage extends EventEmitter {
 
             enemyTank.on('destroyed', () => this.removeEnemyTank(enemyTank));
         });
-    }
-
-    get width() {
-        return STAGE_SIZE;
-    }
-
-    get height() {
-        return STAGE_SIZE;
-    }
-
-    get top() {
-        return 0;
-    }
-
-    get right() {
-        return this.width;
-    }
-
-    get bottom() {
-        return this.height;
-    }
-
-    get left() {
-        return 0;
     }
 
     update(input, frameDelta) {
